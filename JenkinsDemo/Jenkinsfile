@@ -1,33 +1,34 @@
 pipeline {
     agent any
     environment {
-        DOTNET_ROOT = '/usr/share/dotnet'
+        DOTNET_ROOT = '/usr/bin'
         PATH = "${env.DOTNET_ROOT}:${env.PATH}"
     }
     stages {
-        stage('Checkout') {
+        stage('Check Folder') {
             steps {
-                echo 'Source code already checked out by Jenkins.'
+                sh 'pwd'
+                sh 'ls -al'
             }
         }
         stage('Restore') {
             steps {
-                sh 'dotnet restore'
+                sh 'dotnet restore JenkinsDemo.sln'
             }
         }
         stage('Build') {
             steps {
-                sh 'dotnet build --no-restore -c Release'
+                sh 'dotnet build JenkinsDemo.sln --no-restore -c Release'
             }
         }
         stage('Test') {
             steps {
-                sh 'dotnet test --no-build --verbosity normal'
+                sh 'dotnet test JenkinsDemo.sln --no-build --verbosity normal'
             }
         }
         stage('Publish') {
             steps {
-                sh 'dotnet publish -c Release -o publish'
+                sh 'dotnet publish JenkinsDemo/JenkinsDemo.csproj -c Release -o publish'
             }
         }
     }
