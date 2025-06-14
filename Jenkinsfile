@@ -13,22 +13,22 @@ pipeline {
         }
         stage('Restore') {
             steps {
-                sh 'dotnet restore JenkinsDemo.sln'
+                sh 'dotnet restore JenkinsDemo/JenkinsDemo.sln'
             }
         }
         stage('Build') {
             steps {
-                sh 'dotnet build JenkinsDemo.sln --no-restore -c Release'
+                sh 'dotnet build JenkinsDemo/JenkinsDemo.sln --no-restore -c Release'
             }
         }
         stage('Test') {
             steps {
-                sh 'dotnet test JenkinsDemo.sln --no-build --verbosity normal'
+                sh 'dotnet test JenkinsDemo/JenkinsDemo.sln --no-build --verbosity normal'
             }
         }
         stage('Publish') {
             steps {
-                sh 'dotnet publish JenkinsDemo/JenkinsDemo.csproj -c Release -o publish'
+                sh 'dotnet publish JenkinsDemo/JenkinsDemo/JenkinsDemo.csproj -c Release -o publish'
             }
         }
     }
