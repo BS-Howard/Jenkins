@@ -7,7 +7,7 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                git 'https://github.com/BS-Howard/Jenkins.git'
+                echo 'Source code already checked out by Jenkins.'
             }
         }
         stage('Restore') {
