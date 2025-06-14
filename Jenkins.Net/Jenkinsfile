@@ -7,7 +7,7 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                git 'https://github.com/你的帳號/你的repo.git'
+                git 'https://github.com/BS-Howard/Jenkins.git'
             }
         }
         stage('Restore') {
