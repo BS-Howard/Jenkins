@@ -51,7 +51,7 @@ pipeline {
 
     post {
         success {
-            echo '全流程完成，服务已部署在 http://<你的 Jenkins 主机>:8081'
+            echo '自動trigger success！！全流程完成，服务已部署在 http://<你的 Jenkins 主机>:8081'
         }
         failure {
             echo '构建失败，请查看日志'
