@@ -31,5 +31,30 @@ pipeline {
                 sh 'dotnet publish JenkinsDemo/JenkinsDemo/JenkinsDemo.csproj -c Release -o publish'
             }
         }
+        stage('Archive Artifact') {
+            steps {
+                sh 'zip -r publish.zip publish'
+                archiveArtifacts artifacts: 'publish.zip', fingerprint: true
+            }
+        }
+        stage('Docker Build & Run') {
+            steps {
+                sh '''
+                  docker build -t jenkins-demo:latest .
+                  docker stop jenkins-demo || true
+                  docker rm jenkins-demo || true
+                  docker run -d -p 8081:80 --name jenkins-demo jenkins-demo:latest
+                '''
+            }
+        }
+    }
+
+    post {
+        success {
+            echo '全流程完成，服务已部署在 http://<你的 Jenkins 主机>:8081'
+        }
+        failure {
+            echo '构建失败，请查看日志'
+        }
     }
 }
