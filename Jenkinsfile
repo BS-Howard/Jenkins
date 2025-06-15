@@ -1,11 +1,10 @@
 pipeline {
     agent any
-    triggers {
-        // cron('H 2 * * *') // 每天凌晨2点执行
-    }
     environment {
         DOTNET_ROOT = '/usr/bin'
         PATH = "${env.DOTNET_ROOT}:${env.PATH}"
+        SONARQUBE = 'MySonar'
+        SCANNER_HOME = tool name: 'SonarQube Scanner'
     }
     stages {
         stage('Check Folder') {
@@ -17,6 +16,17 @@ pipeline {
         stage('Restore') {
             steps {
                 sh 'dotnet restore JenkinsDemo/JenkinsDemo.sln'
+            }
+        }
+        stage('SonarQube Analysis') {
+            steps {
+                withSonarQubeEnv("${SONARQUBE}") {
+                    sh "${SCANNER_HOME}/bin/sonar-scanner " +
+                        "-Dsonar.projectKey=${env.JOB_NAME} " +
+                        '-Dsonar.sources=. ' +
+                        "-Dsonar.host.url=${env.SONAR_HOST_URL} " +
+                        "-Dsonar.login=${env.SONAR_AUTH_TOKEN}"
+                }
             }
         }
         stage('Build') {
