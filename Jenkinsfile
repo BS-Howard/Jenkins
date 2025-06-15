@@ -51,14 +51,31 @@ pipeline {
 
     post {
         success {
-            slackSend channel: '#jenkins-builds',
-              color: 'good',
+            slackSend channel: '#jenkins-builds', color: 'good',
+              tokenCredentialId: 'slack-bot-token',
               message: "✅ Build #${env.BUILD_NUMBER} 成功！ (<${env.BUILD_URL}|查看>)"
+            // Email 通知
+            emailext subject: "✅ Build #${env.BUILD_NUMBER} Success",
+             body: """\
+                    Jenkins Job: ${env.JOB_NAME}
+                    Build Number: ${env.BUILD_NUMBER}
+                    Status: SUCCESS
+                    See: ${env.BUILD_URL}
+                    """,
+             to: 'howard199887@gmail.com'
         }
         failure {
-            slackSend channel: '#jenkins-builds',
-              color: 'danger',
+            slackSend channel: '#jenkins-builds', color: 'danger',
+              tokenCredentialId: 'slack-bot-token',
               message: "❌ Build #${env.BUILD_NUMBER} 失败！ (<${env.BUILD_URL}|查看>)"
+            emailext subject: "❌ Build #${env.BUILD_NUMBER} Failed",
+             body: """\
+                    Jenkins Job: ${env.JOB_NAME}
+                    Build Number: ${env.BUILD_NUMBER}
+                    Status: FAILURE
+                    See: ${env.BUILD_URL}console
+                    """,
+             to: 'howard199887@gmail.com'
         }
     }
 }
