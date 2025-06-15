@@ -64,31 +64,57 @@ pipeline {
 
     post {
         success {
-            slackSend channel: '#jenkins-builds', color: 'good',
-              tokenCredentialId: 'slack-bot-token',
-              message: "✅ Build #${env.BUILD_NUMBER} 成功！ (<${env.BUILD_URL}|查看>)"
-            // Email 通知
-            emailext subject: "✅ Build #${env.BUILD_NUMBER} Success",
-             body: """\
-                    Jenkins Job: ${env.JOB_NAME}
-                    Build Number: ${env.BUILD_NUMBER}
-                    Status: SUCCESS
-                    See: ${env.BUILD_URL}
-                    """,
-             to: 'howard199887@gmail.com'
+            script {
+                // 1. 获取当前分支和时间
+                def branch = env.BRANCH_NAME ?: env.GIT_BRANCH ?: 'unknown'
+                def ts = new Date().format('yyyy-MM-dd HH:mm:ss', TimeZone.getTimeZone('Asia/Taipei'))
+
+                // 2. Slack 通知
+                slackSend channel: '#jenkins-builds',
+                color: 'good',
+                tokenCredentialId: 'slack-bot-token',
+                message: "✅ Build #${env.BUILD_NUMBER} 成功！\n" +
+                         "分支：`${branch}`\n" +
+                         "时间：${ts}\n" +
+                         "<${env.BUILD_URL}|查看详情>"
+
+                // 3. Email 通知
+                emailext subject: "✅ [${branch}] Build #${env.BUILD_NUMBER} Success",
+               body: """\
+                        Jenkins Job: ${env.JOB_NAME}
+                        Branch: ${branch}
+                        Build Number: ${env.BUILD_NUMBER}
+                        Time: ${ts}
+                        Status: SUCCESS
+                        Details: ${env.BUILD_URL}
+                        """,
+               to: 'howard199887@gmail.com'
+            }
         }
         failure {
-            slackSend channel: '#jenkins-builds', color: 'danger',
-              tokenCredentialId: 'slack-bot-token',
-              message: "❌ Build #${env.BUILD_NUMBER} 失败！ (<${env.BUILD_URL}|查看>)"
-            emailext subject: "❌ Build #${env.BUILD_NUMBER} Failed",
-             body: """\
-                    Jenkins Job: ${env.JOB_NAME}
-                    Build Number: ${env.BUILD_NUMBER}
-                    Status: FAILURE
-                    See: ${env.BUILD_URL}console
-                    """,
-             to: 'howard199887@gmail.com'
+            script {
+                def branch = env.BRANCH_NAME ?: env.GIT_BRANCH ?: 'unknown'
+                def ts = new Date().format('yyyy-MM-dd HH:mm:ss', TimeZone.getTimeZone('Asia/Taipei'))
+
+                slackSend channel: '#jenkins-builds',
+                color: 'danger',
+                tokenCredentialId: 'slack-bot-token',
+                message: "❌ Build #${env.BUILD_NUMBER} 失败！\n" +
+                         "分支：`${branch}`\n" +
+                         "时间：${ts}\n" +
+                         "<${env.BUILD_URL}|查看日志>"
+
+                emailext subject: "❌ [${branch}] Build #${env.BUILD_NUMBER} Failed",
+               body: """\
+                        Jenkins Job: ${env.JOB_NAME}
+                        Branch: ${branch}
+                        Build Number: ${env.BUILD_NUMBER}
+                        Time: ${ts}
+                        Status: FAILURE
+                        Log: ${env.BUILD_URL}console
+                        """,
+               to: 'howard199887@gmail.com'
+            }
         }
         always {
             echo "Finished build of ${env.BRANCH_NAME}"
