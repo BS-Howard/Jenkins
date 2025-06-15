@@ -1,5 +1,8 @@
 pipeline {
     agent any
+    triggers {
+        // cron('H 2 * * *') // 每天凌晨2点执行
+    }
     environment {
         DOTNET_ROOT = '/usr/bin'
         PATH = "${env.DOTNET_ROOT}:${env.PATH}"
@@ -76,6 +79,9 @@ pipeline {
                     See: ${env.BUILD_URL}console
                     """,
              to: 'howard199887@gmail.com'
+        }
+        always {
+            echo "Finished build of ${env.BRANCH_NAME}"
         }
     }
 }
