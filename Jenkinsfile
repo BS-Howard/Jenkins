@@ -22,8 +22,8 @@ pipeline {
             steps {
                 withSonarQubeEnv('MySonar') {
                     script {
-                        // 把 Job name 的斜杠换成下划线 
-                        def key = env.JOB_NAME.replace('/', '_')
+                        // 把 Job name 的斜杠换成下划线
+                        def key = env.JOB_NAME.replace('/', '_').replace('%2', '_')
                         sh """
                         ${tool 'SonarQube_Scanner'}/bin/sonar-scanner \
                             -Dsonar.projectKey=${key} \
