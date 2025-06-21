@@ -4,7 +4,7 @@ pipeline {
         DOTNET_ROOT = '/usr/bin'
         PATH = "${env.DOTNET_ROOT}:${env.PATH}"
         SONARQUBE = 'MySonar'
-        SCANNER_HOME = tool name: 'SonarQube Scanner'
+        SCANNER_HOME = tool name: 'SonarQube_Scanner'
     }
     stages {
         stage('Check Folder') {
