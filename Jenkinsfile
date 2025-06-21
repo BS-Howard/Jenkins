@@ -65,7 +65,7 @@ pipeline {
     post {
         success {
             script {
-                // 1. 获取当前分支和时间 
+                // 1. 获取当前分支和时间
                 def branch = env.BRANCH_NAME ?: env.GIT_BRANCH ?: 'unknown'
                 def ts = new Date().format('yyyy-MM-dd HH:mm:ss', TimeZone.getTimeZone('Asia/Taipei'))
 
