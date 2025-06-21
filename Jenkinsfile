@@ -7,6 +7,12 @@ pipeline {
         SCANNER_HOME = tool name: 'SonarQube_Scanner'
     }
     stages {
+        stage('Env Setup') {
+            steps {
+                sh 'chmod +x scripts/env-setup.sh'
+                sh 'sudo scripts/env-setup.sh'
+            }
+        }
         stage('Check Folder') {
             steps {
                 sh 'pwd'
@@ -20,16 +26,15 @@ pipeline {
         }
         stage('SonarQube Analysis') {
             steps {
-                withSonarQubeEnv('MySonar') {
+                withSonarQubeEnv(SONARQUBE) {
                     script {
-                        // 把 Job name 的斜杠换成下划线
                         def key = env.JOB_NAME.replace('/', '_')
                         sh """
                         ${tool 'SonarQube_Scanner'}/bin/sonar-scanner \
                             -Dsonar.projectKey=${key} \
                             -Dsonar.sources=.
                         """
-                        }
+                    }
                 }
             }
         }
@@ -54,33 +59,35 @@ pipeline {
                 archiveArtifacts artifacts: 'publish.zip', fingerprint: true
             }
         }
-        stage('Docker Build & Run') {
+        stage('Docker Deploy') {
             steps {
-                sh '''
-                  docker build -t jenkins-demo:latest .
-                  docker stop jenkins-demo || true
-                  docker rm jenkins-demo || true
-                  docker run -d -p 8081:80 --name jenkins-demo jenkins-demo:latest
-                '''
+                sh 'chmod +x scripts/deploy.sh'
+                sh 'scripts/deploy.sh'
+            }
+        }
+        stage('Health Check') {
+            steps {
+                sh 'chmod +x scripts/health-check.sh'
+                sh 'scripts/health-check.sh localhost 8081'
+            }
+        }
+        stage('Cleanup') {
+            steps {
+                sh 'chmod +x scripts/cleanup.sh'
+                sh 'scripts/cleanup.sh'
             }
         }
     }
-
     post {
         success {
             script {
-                // 1. 获取当前分支和时间
                 def branch = env.BRANCH_NAME ?: env.GIT_BRANCH ?: 'unknown'
                 def ts = new Date().format('yyyy-MM-dd HH:mm:ss', TimeZone.getTimeZone('Asia/Taipei'))
 
-                // 2. Slack 通知
                 slackSend channel: '#jenkins-builds',
-                color: 'good',
-                tokenCredentialId: 'slack-bot-token',
-                message: "✅ Build #${env.BUILD_NUMBER} 成功！\n" +
-                         "分支：`${branch}`\n" +
-                         "时间：${ts}\n" +
-                         "<${env.BUILD_URL}|查看详情>"
+                          color: 'good',
+                          tokenCredentialId: 'slack-bot-token',
+                          message: "✅ Build #${env.BUILD_NUMBER} 成功！\n分支：`${branch}`\n時間：${ts}\n<${env.BUILD_URL}|查看詳情>"
             }
         }
         failure {
@@ -89,12 +96,9 @@ pipeline {
                 def ts = new Date().format('yyyy-MM-dd HH:mm:ss', TimeZone.getTimeZone('Asia/Taipei'))
 
                 slackSend channel: '#jenkins-builds',
-                color: 'danger',
-                tokenCredentialId: 'slack-bot-token',
-                message: "❌ Build #${env.BUILD_NUMBER} 失败！\n" +
-                         "分支：`${branch}`\n" +
-                         "时间：${ts}\n" +
-                         "<${env.BUILD_URL}|查看日志>"
+                          color: 'danger',
+                          tokenCredentialId: 'slack-bot-token',
+                          message: "❌ Build #${env.BUILD_NUMBER} 失敗！\n分支：`${branch}`\n時間：${ts}\n<${env.BUILD_URL}|查看日誌>"
             }
         }
         always {
