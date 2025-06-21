@@ -1,7 +1,7 @@
 pipeline {
     agent any
     environment {
-        DOTNET_ROOT = "${env.HOME}/.dotnet"
+        DOTNET_ROOT = '/usr/bin'
         PATH = "${env.DOTNET_ROOT}:${env.PATH}"
         SONARQUBE = 'MySonar'
         SCANNER_HOME = tool name: 'SonarQube Scanner'
