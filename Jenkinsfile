@@ -21,11 +21,11 @@ pipeline {
         stage('SonarQube Analysis') {
             steps {
                 withSonarQubeEnv("${SONARQUBE}") {
-                    sh """
-                        ${SCANNER_HOME}/bin/sonar-scanner \
-                        -Dsonar.projectKey=${env.JOB_NAME} \
-                        -Dsonar.sources=.
-                    """
+                    sh "${SCANNER_HOME}/bin/sonar-scanner " +
+                        "-Dsonar.projectKey=${env.JOB_NAME} " +
+                        '-Dsonar.sources=. ' +
+                        "-Dsonar.host.url=${env.SONAR_HOST_URL} " +
+                        "-Dsonar.login=${env.SONAR_AUTH_TOKEN}"
                 }
             }
         }
