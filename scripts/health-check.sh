@@ -5,7 +5,7 @@ HOST=${1:-localhost}
 PORT=${2:-8081}
 
 echo "🔍 檢查 ${HOST}:${PORT}…"
-if curl --fail --silent "http://${HOST}:${PORT}/healthz"; then
+if curl --fail --silent "http://${HOST}:${PORT}"; then
   echo "✅ 服務正常（HTTP 200）"
 else
   echo "🚨 健康檢查失敗！"
