@@ -22,7 +22,7 @@ pipeline {
             steps {
                 withSonarQubeEnv('MySonar') {
                     script {
-                        // 把 Job name 的斜杠换成下划线
+                        // 把 Job name 的斜杠换成下划线 
                         def key = env.JOB_NAME.replace('/', '_')
                         sh """
                         ${tool 'SonarQube_Scanner'}/bin/sonar-scanner \
