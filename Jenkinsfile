@@ -65,7 +65,7 @@ pipeline {
     post {
         success {
             script {
-                // 1. 获取当前分支和时间
+                // 1. 获取当前分支和时间 
                 def branch = env.BRANCH_NAME ?: env.GIT_BRANCH ?: 'unknown'
                 def ts = new Date().format('yyyy-MM-dd HH:mm:ss', TimeZone.getTimeZone('Asia/Taipei'))
 
@@ -77,18 +77,6 @@ pipeline {
                          "分支：`${branch}`\n" +
                          "时间：${ts}\n" +
                          "<${env.BUILD_URL}|查看详情>"
-
-                // 3. Email 通知
-                emailext subject: "✅ [${branch}] Build #${env.BUILD_NUMBER} Success",
-               body: """\
-                        Jenkins Job: ${env.JOB_NAME}
-                        Branch: ${branch}
-                        Build Number: ${env.BUILD_NUMBER}
-                        Time: ${ts}
-                        Status: SUCCESS
-                        Details: ${env.BUILD_URL}
-                        """,
-               to: 'howard199887@gmail.com'
             }
         }
         failure {
@@ -103,17 +91,6 @@ pipeline {
                          "分支：`${branch}`\n" +
                          "时间：${ts}\n" +
                          "<${env.BUILD_URL}|查看日志>"
-
-                emailext subject: "❌ [${branch}] Build #${env.BUILD_NUMBER} Failed",
-               body: """\
-                        Jenkins Job: ${env.JOB_NAME}
-                        Branch: ${branch}
-                        Build Number: ${env.BUILD_NUMBER}
-                        Time: ${ts}
-                        Status: FAILURE
-                        Log: ${env.BUILD_URL}console
-                        """,
-               to: 'howard199887@gmail.com'
             }
         }
         always {
