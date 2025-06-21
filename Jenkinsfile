@@ -20,12 +20,16 @@ pipeline {
         }
         stage('SonarQube Analysis') {
             steps {
-                withSonarQubeEnv("${SONARQUBE}") {
-                    sh "${SCANNER_HOME}/bin/sonar-scanner " +
-                        "-Dsonar.projectKey=${env.JOB_NAME} " +
-                        '-Dsonar.sources=. ' +
-                        "-Dsonar.host.url=${env.SONAR_HOST_URL} " +
-                        "-Dsonar.login=${env.SONAR_AUTH_TOKEN}"
+                withSonarQubeEnv('MySonar') {
+                    script {
+                        // 把 Job name 的斜杠换成下划线
+                        def key = env.JOB_NAME.replace('/', '_')
+                        sh """
+                    ${tool 'SonarQube_Scanner'}/bin/sonar-scanner \
+                        -Dsonar.projectKey=${key} \
+                        -Dsonar.sources=.
+                    """
+                    }
                 }
             }
         }
