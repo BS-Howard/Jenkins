@@ -9,8 +9,8 @@ pipeline {
     stages {
         stage('Env Setup') {
             steps {
-                sh 'chmod +x scripts/env-setup.sh'
-                sh 'sudo scripts/env-setup.sh'
+                sh 'chmod +x net-example/scripts/env-setup.sh'
+                sh 'sudo net-example/scripts/env-setup.sh'
             }
         }
         stage('Check Folder') {
@@ -61,20 +61,20 @@ pipeline {
         }
         stage('Docker Deploy') {
             steps {
-                sh 'chmod +x scripts/deploy.sh'
-                sh 'scripts/deploy.sh'
+                sh 'chmod +x net-example/scripts/deploy.sh'
+                sh 'net-example/scripts/deploy.sh'
             }
         }
         stage('Health Check') {
             steps {
-                sh 'chmod +x scripts/health-check.sh'
-                sh 'scripts/health-check.sh localhost 8081'
+                sh 'chmod +x net-example/scripts/health-check.sh'
+                sh 'net-example/scripts/health-check.sh localhost 8081'
             }
         }
         stage('Cleanup') {
             steps {
-                sh 'chmod +x scripts/cleanup.sh'
-                sh 'scripts/cleanup.sh'
+                sh 'chmod +x net-example/scripts/cleanup.sh'
+                sh 'net-example/scripts/cleanup.sh'
             }
         }
     }
