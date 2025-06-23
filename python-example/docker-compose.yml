@@ -13,6 +13,6 @@ services:
     volumes:
       - ./nginx.conf:/etc/nginx/nginx.conf:ro
     ports:
-      - "8011:8011"
+      - "5123:5123"
     depends_on:
       - python-service
