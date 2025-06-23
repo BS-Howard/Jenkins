@@ -1,0 +1,43 @@
+pipeline {
+    agent any
+    stages {
+        stage('Checkout') {
+            steps {
+                checkout scm
+            }
+        }
+        stage('Build & Deploy') {
+            steps {
+                sh 'docker-compose build'
+                sh 'docker-compose up -d'
+            }
+        }
+    }
+    post {
+        success {
+            script {
+                def branch = env.BRANCH_NAME ?: env.GIT_BRANCH ?: 'unknown'
+                def ts = new Date().format('yyyy-MM-dd HH:mm:ss', TimeZone.getTimeZone('Asia/Taipei'))
+
+                slackSend channel: '#jenkins-builds',
+                          color: 'good',
+                          tokenCredentialId: 'slack-bot-token',
+                          message: "✅ Build python-example #${env.BUILD_NUMBER} 成功！\n分支：`${branch}`\n時間：${ts}\n<${env.BUILD_URL}|查看詳情>"
+            }
+        }
+        failure {
+            script {
+                def branch = env.BRANCH_NAME ?: env.GIT_BRANCH ?: 'unknown'
+                def ts = new Date().format('yyyy-MM-dd HH:mm:ss', TimeZone.getTimeZone('Asia/Taipei'))
+
+                slackSend channel: '#jenkins-builds',
+                          color: 'danger',
+                          tokenCredentialId: 'slack-bot-token',
+                          message: "❌ Build python-example #${env.BUILD_NUMBER} 失敗！\n分支：`${branch}`\n時間：${ts}\n<${env.BUILD_URL}|查看日誌>"
+            }
+        }
+        always {
+            echo "Finished build of ${env.BRANCH_NAME}"
+        }
+    }
+}
