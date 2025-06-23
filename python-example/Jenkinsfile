@@ -8,8 +8,8 @@ pipeline {
         }
         stage('Build & Deploy') {
             steps {
-                sh 'docker-compose build'
-                sh 'docker-compose up -d'
+                sh 'docker-compose -f python-example/docker-compose.yml build'
+                sh 'docker-compose -f python-example/docker-compose.yml up -d'
             }
         }
     }
