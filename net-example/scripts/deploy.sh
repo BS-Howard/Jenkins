@@ -6,6 +6,8 @@ CONTAINER="jenkins-demo"
 PORT=8081
 
 echo "🚀 部署新版本…"
+cd "$(dirname "$0")/.."
+
 # build image
 docker build -t ${IMAGE} .
 
