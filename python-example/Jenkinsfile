@@ -9,7 +9,8 @@ pipeline {
         stage('Build & Deploy') {
             steps {
                 sh 'docker-compose -f python-example/docker-compose.yml build'
-                sh 'docker-compose -f python-example/docker-compose.yml up -d'
+                sh 'docker-compose -f python-example/docker-compose.yml up -d --remove-orphans'
+                sh 'docker-compose -f python-example/docker-compose.yml ps'
             }
         }
     }
