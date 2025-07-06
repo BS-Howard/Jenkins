@@ -91,7 +91,7 @@ pipeline {
                 slackSend channel: '#jenkins-builds',
                 color: 'good',
                 tokenCredentialId: 'slack-bot-token',
-                message: "✅ Build net-example #${env.BUILD_NUMBER} 成功！\n分支：`${branch}`\n時間：${ts}\n<${env.BUILD_URL}|查看詳情>"
+                message: "✅ Build net-example  #${env.BUILD_NUMBER} 成功！\n分支：`${branch}`\n時間：${ts}\n<${env.BUILD_URL}|查看詳情>"
             }
         }
         failure {
@@ -102,7 +102,7 @@ pipeline {
                 slackSend channel: '#jenkins-builds',
                 color: 'danger',
                 tokenCredentialId: 'slack-bot-token',
-                message: "❌ Build net-example #${env.BUILD_NUMBER} 失敗！\n分支：`${branch}`\n時間：${ts}\n<${env.BUILD_URL}|查看日誌>"
+                message: "❌ Build net-example  #${env.BUILD_NUMBER} 失敗！\n分支：`${branch}`\n時間：${ts}\n<${env.BUILD_URL}|查看日誌>"
             }
         }
         always {
