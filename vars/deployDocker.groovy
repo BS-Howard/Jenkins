@@ -8,9 +8,9 @@ def call(Map config = [:]) {
         hostPort: 8081,
         healthCheckUrl: 'http://localhost:8081',
         healthCheckTimeout: 30,
-        deployScript: 'scripts/deploy.sh',
-        healthCheckScript: 'scripts/health-check.sh',
-        cleanupScript: 'scripts/cleanup.sh'
+        deployScript: 'net-example/scripts/deploy.sh',
+        healthCheckScript: 'net-example/scripts/health-check.sh',
+        cleanupScript: 'net-example/scripts/cleanup.sh'
     ]
 
     config = defaults + config

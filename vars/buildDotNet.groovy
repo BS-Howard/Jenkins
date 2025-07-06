@@ -2,8 +2,8 @@
 
 def call(Map config = [:]) {
     def defaults = [
-        solutionPath: 'JenkinsDemo/JenkinsDemo.sln',
-        projectPath: 'JenkinsDemo/JenkinsDemo/JenkinsDemo.csproj',
+        solutionPath: 'net-example/JenkinsDemo/JenkinsDemo.sln',
+        projectPath: 'net-example/JenkinsDemo/JenkinsDemo/JenkinsDemo.csproj',
         buildConfig: 'Release',
         outputPath: 'publish',
         sonarQube: 'MySonar',

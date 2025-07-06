@@ -2,8 +2,8 @@
 
 // 所有 .NET 專案都可以使用相同的建置流程
 buildDotNet(
-    solutionPath: 'JenkinsDemo/JenkinsDemo.sln',
-    projectPath: 'JenkinsDemo/JenkinsDemo/JenkinsDemo.csproj',
+    solutionPath: 'net-example/JenkinsDemo/JenkinsDemo.sln',
+    projectPath: 'net-example/JenkinsDemo/JenkinsDemo/JenkinsDemo.csproj',
     buildConfig: 'Release',
     skipTests: false,
     timeout: 10
@@ -14,7 +14,7 @@ deployDocker(
     imageName: 'jenkins-demo',
     containerName: 'jenkins-demo',
     port: 8081,
-    deployScript: 'scripts/deploy.sh',
-    healthCheckScript: 'scripts/health-check.sh',
-    cleanupScript: 'scripts/cleanup.sh'
+    deployScript: 'net-example/scripts/deploy.sh',
+    healthCheckScript: 'net-example/scripts/health-check.sh',
+    cleanupScript: 'net-example/scripts/cleanup.sh'
 ) 
