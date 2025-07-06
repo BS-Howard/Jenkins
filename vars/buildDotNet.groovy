@@ -14,7 +14,7 @@ def call(Map config = [:]) {
     config = defaults + config
     
     pipeline {
-        agent any
+        agent { label 'linux-agent' }
         
         environment {
             DOTNET_ROOT = '/usr/bin'

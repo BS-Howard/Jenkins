@@ -6,7 +6,7 @@ buildDotNet(
     projectPath: 'net-example/JenkinsDemo/JenkinsDemo/JenkinsDemo.csproj',
     buildConfig: 'Release',
     skipTests: false,
-    timeout: 10
+    timeout: 100
 )
 
 // 使用共享函式庫進行 Docker 部署
