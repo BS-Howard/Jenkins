@@ -27,8 +27,8 @@ def call(Map config = [:]) {
                 steps {
                     script {
                         echo "🔧 Setting up environment for .NET build..."
-                        sh 'chmod +x scripts/env-setup.sh'
-                        sh 'sudo scripts/env-setup.sh'
+                        sh 'chmod +x net-example/scripts/env-setup.sh'
+                        sh 'sudo net-example/scripts/env-setup.sh'
                     }
                 }
             }

@@ -44,8 +44,8 @@ def call(Map config = [:]) {
                 steps {
                     script {
                         echo '🚀 Deploying new container...'
-                        sh "chmod +x ${config.deployScript}"
-                        sh "${config.deployScript}"
+                        sh 'chmod +x net-example/scripts/deploy.sh'
+                        sh 'net-example/scripts/deploy.sh'
                     }
                 }
             }
@@ -54,14 +54,14 @@ def call(Map config = [:]) {
                 steps {
                     script {
                         echo '🔍 Performing health check...'
-                        sh "chmod +x ${config.healthCheckScript}"
+                        sh 'chmod +x net-example/scripts/health-check.sh'
 
                         // 等待服務啟動
                         sleep(time: 10, unit: 'SECONDS')
 
                         // 重試機制
                         retry(3) {
-                            sh "${config.healthCheckScript} localhost ${config.port}"
+                            sh 'net-example/scripts/health-check.sh localhost 8081'
                         }
                     }
                 }
@@ -71,8 +71,8 @@ def call(Map config = [:]) {
                 steps {
                     script {
                         echo '🧹 Cleaning up...'
-                        sh "chmod +x ${config.cleanupScript}"
-                        sh "${config.cleanupScript}"
+                        sh 'chmod +x net-example/scripts/cleanup.sh'
+                        sh 'net-example/scripts/cleanup.sh'
                     }
                 }
             }
