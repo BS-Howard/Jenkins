@@ -19,7 +19,6 @@ def call(Map config = [:]) {
         environment {
             DOTNET_ROOT = '/usr/bin'
             PATH = "${env.DOTNET_ROOT}:${env.PATH}"
-            SONARQUBE = config.sonarQube
             SCANNER_HOME = tool name: 'SonarQube_Scanner'
         }
         
@@ -54,7 +53,7 @@ def call(Map config = [:]) {
                 steps {
                     script {
                         echo "🔍 Running SonarQube analysis..."
-                        withSonarQubeEnv(SONARQUBE) {
+                        withSonarQubeEnv(config.sonarQube) {
                             def key = env.JOB_NAME.replace('/', '_')
                             sh """
                             ${tool 'SonarQube_Scanner'}/bin/sonar-scanner \
